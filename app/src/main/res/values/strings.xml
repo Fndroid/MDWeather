@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">国内天气</string>
+    <string name="input_placename_hint">请输入地名</string>
+    <string name="delete">Delete</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.fndroid.byweather.TestActivity">
+
+    <com.fndroid.byweather.views.TrendGraph
+        android:id="@+id/tg"
+        android:layout_width="match_parent"
+        app:textColor="@color/colorAccent"
+        app:textSize="22sp"
+        app:circleRadius="2dp"
+        android:layout_height="200dp"/>
+
+</LinearLayout>

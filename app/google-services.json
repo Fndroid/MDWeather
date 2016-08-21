@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "621346241626",
+    "firebase_url": "https://byweather-109cf.firebaseio.com",
+    "project_id": "byweather-109cf",
+    "storage_bucket": "byweather-109cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621346241626:android:145cd716df3e8ed8",
+        "android_client_info": {
+          "package_name": "com.fndroid.byweather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621346241626-vmf4dtoeabu8rn9ist8hm9l48dcjh2a9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fndroid.byweather",
+            "certificate_hash": "060733263E27A7933D4000BC3830BE5742E17B58"
+          }
+        },
+        {
+          "client_id": "621346241626-itn6dbjo25u6k13pspc8ncme8d0vb12e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD273K_BtdSR-xP2u_Nor_CCz-_9el2-64"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621346241626-itn6dbjo25u6k13pspc8ncme8d0vb12e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
