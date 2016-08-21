@@ -5,8 +5,7 @@ package com.fndroid.byweather.constant;
  */
 
 public class Constant {
-	public static final String URL_PLACELIST = "http://apis.baidu" + "" +
-			".com/apistore/weatherservice/citylist";
+	public static final String URL_PLACELIST = "http://apis.baidu.com/apistore/weatherservice/citylist";
 	public static final String URL_PLACEPINYIN = "http://apis.baidu" + "" +
 			".com/apistore/weatherservice/weather";
 	public static final String APIKEY = "f2de5bfe3a3220a2c31b43ea831f63f5";

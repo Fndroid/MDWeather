@@ -28,11 +28,11 @@ public class FbaDisappearBehavior extends FloatingActionButton.Behavior {
 		super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed,
 				dxUnconsumed, dyUnconsumed);
 		if (dyConsumed < 0) {
-			child.show();
-//			child.setVisibility(View.VISIBLE);
+//			child.show();
+			child.setVisibility(View.VISIBLE);
 		} else if (dyConsumed > 0){
-			child.hide();
-//			child.setVisibility(View.INVISIBLE);
+//			child.hide();
+			child.setVisibility(View.INVISIBLE);
 		}
 	}
 

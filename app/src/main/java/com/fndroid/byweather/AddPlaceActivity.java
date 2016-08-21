@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,6 +32,8 @@ import com.fndroid.byweather.beans.PlaceList;
 import com.fndroid.byweather.beans.RetDataBean;
 import com.google.gson.Gson;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,18 +90,20 @@ public class AddPlaceActivity extends AppCompatActivity implements
     }
 
 
-    private void sendRequestForPlaceList(String name) {
+    private void sendRequestForPlaceList(String name) throws UnsupportedEncodingException {
         String url;
         isPinyin = name.length() == name.getBytes().length;
         if (!isPinyin) {
-            Log.d(TAG, "sendRequestForPlaceList: 是英文");
-            url = URL_PLACELIST + "?cityname=" + name;
+            Log.d(TAG, "sendRequestForPlaceList: 不是英文"+" "+URLEncoder.encode(name, "utf-8"));
+            url = URL_PLACELIST + "?cityname=" + URLEncoder.encode(name, "UTF-8").replaceAll("\\+","%20");
         } else {
             url = URL_PLACEPINYIN + "?citypinyin=" + name;
         }
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+        Log.d(TAG, "sendRequestForPlaceList: "+url.toString());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET ,url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d(TAG, "onResponse() called with: response = [" + response + "]");
                 List<RetDataBean> responseDataBean = getPlaceList(response);
                 mRetDataBeanList.clear();
                 if (responseDataBean != null) {
@@ -115,6 +120,7 @@ public class AddPlaceActivity extends AppCompatActivity implements
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
+
                 headers.put("apikey", APIKEY);
                 return headers;
             }
@@ -175,7 +181,11 @@ public class AddPlaceActivity extends AppCompatActivity implements
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         switch (actionId) {
             case EditorInfo.IME_ACTION_SEARCH:
-                sendRequestForPlaceList(v.getText().toString());
+                try {
+                    sendRequestForPlaceList(v.getText().toString());
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
         return true;
