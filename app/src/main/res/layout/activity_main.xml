@@ -75,7 +75,7 @@
         app:fabSize="normal"
         app:layout_anchor="@id/main_bottomSheet"
         app:layout_anchorGravity="top|end"
-        app:layout_behavior="com.fndroid.byweather.behaviors.FbaDIsappearBehaviro"
+        app:layout_behavior="com.fndroid.byweather.behaviors.FbaDisappearBehavior"
         app:pressedTranslationZ="12dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,7 +1,5 @@
 package com.fndroid.byweather;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,10 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,10 +35,10 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.fndroid.byweather.beans.Weather;
 import com.fndroid.byweather.utils.Util;
 import com.fndroid.byweather.views.TrendGraph;
@@ -85,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private float scale;
 	private int heightPixels;
 	private int widthPixels;
-	private MyOnPageChangeListener mMyOnPageChangeListener;
 	private SharedPreferences mSP;
 	private SharedPreferences.Editor mSPEditor;
 	private List<String> mCityIdList;
@@ -206,23 +200,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	private void loadImgByURL(String url, final View view) {
-		ImageView img = (ImageView) mViews.get(0).findViewById(R.id.vp_image);
-		int maxHeight = img.getHeight();
-		int maxWidth = img.getWidth();
-		ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
-			@Override
-			public void onResponse(Bitmap response) {
-				ImageView imageView = (ImageView) view.findViewById(R.id.vp_image);
-				imageView.setImageBitmap(response);
-				Log.d(TAG, "onResponse: imgs"+mCityIdList);
-			}
-		}, maxWidth, maxHeight, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {
-
-			}
-		});
-		mRequestQueue.add(imageRequest);
+		ImageView imageView = (ImageView) view.findViewById(R.id.vp_image);
+		Glide.with(this).load(url).placeholder(R.drawable.test2).crossFade().into(imageView);
 	}
 
 	private View getEmptyWeatherView() {
@@ -233,12 +212,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	private boolean updateWeatherView(View view, Weather weather) {
 		String viewName;
-//		view.setOnTouchListener(new View.OnTouchListener() {
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {
-//				return true;
-//			}
-//		});
 		TrendGraph forcastGraph = (TrendGraph) view.findViewById(R.id.vp_forcast_trend);
 		TrendGraph historyGraph = (TrendGraph) view.findViewById(R.id.vp_history_trend);
 		TextView cityName = (TextView) view.findViewById(R.id.vp_cityName);
@@ -388,6 +361,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		mBottomSheet = (LinearLayout) findViewById(R.id.main_bottomSheet);
 		mBottomSheet.setOnTouchListener(new MyOnTouchListener());
 		mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheet);
+		mBottomSheetBehavior.setPeekHeight(0);
+		mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 		root = (CoordinatorLayout) findViewById(R.id.main_root);
 		mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		setSupportActionBar(mToolbar);
@@ -403,8 +378,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		mAdapter = new MyPagerAdapter();
 		mViewPager.setAdapter(mAdapter);
 		mTabLayout.setupWithViewPager(mViewPager);
-		mMyOnPageChangeListener = new MyOnPageChangeListener();
-		mViewPager.addOnPageChangeListener(mMyOnPageChangeListener);
 	}
 
 	@Override
@@ -420,7 +393,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				}
 				break;
 			case R.id.vp_forcast_card:
-				jumpUpAnimate(v, 0);
 				openOptionsMenu();
 				break;
 		}
@@ -441,7 +413,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				mAdapter.notifyDataSetChanged();
 				break;
 			case R.id.menu_share:
-				getScreenImage();
 				mBottomSheetBehavior.setState(mBottomSheetBehavior.getState() ==
 						BottomSheetBehavior.STATE_EXPANDED ? BottomSheetBehavior.STATE_COLLAPSED :
 						BottomSheetBehavior.STATE_EXPANDED);
@@ -514,70 +485,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		canvas.drawColor(Color.parseColor("#adadad"));
 		view.draw(canvas);
 		return bitmap;
-	}
-
-	private class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-		@Override
-		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-		}
-
-		@Override
-		public void onPageSelected(int position) {
-			if (!canAnimate) {
-				return;
-			}
-			Log.d(TAG, "onPageSelected() called with: position = [" + position + "]");
-			Log.d(TAG, "onPageSelected: " + mViews.get(position).getTag().toString());
-			View imgView = mViews.get(position).findViewById(R.id.vp_image);
-			View forcast = mViews.get(position).findViewById(R.id.vp_forcast_card);
-			View history = mViews.get(position).findViewById(R.id.vp_history_card);
-			View index = mViews.get(position).findViewById(R.id.vp_index_card);
-			circularAnimate(imgView, 0);
-//			pastDownAnimate(forcast, 100);
-//			pastDownAnimate(history, 150);
-//			pastDownAnimate(index, 200);
-		}
-
-		@Override
-		public void onPageScrollStateChanged(int state) {
-
-		}
-
-
-	}
-
-	private void circularAnimate(View view, int delay) {
-		Animator circularReveal = null;
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-			circularReveal = ViewAnimationUtils.createCircularReveal(view, 0, 0, 0, (float) Math
-					.sqrt(Math.pow(view.getWidth(), 2) + Math.pow(view.getHeight(), 2)));
-		}
-		circularReveal.setStartDelay(delay);
-		circularReveal.setDuration(400);
-		circularReveal.setInterpolator(new DecelerateInterpolator());
-		circularReveal.start();
-	}
-
-	private void pastDownAnimate(View view, int delay) {
-		ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX", -10 * scale, 0);
-		animator.setStartDelay(delay);
-		animator.setDuration(500);
-		animator.setInterpolator(new DecelerateInterpolator());
-		animator.start();
-	}
-
-	private void jumpUpAnimate(View view, int delay) {
-		ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationZ", 0, 40);
-		animator.setStartDelay(delay);
-		animator.setDuration(400);
-		animator.setInterpolator(new DecelerateInterpolator());
-		ObjectAnimator animator2 = ObjectAnimator.ofFloat(view, "translationZ", 40, 0);
-		animator2.setStartDelay(500);
-		animator2.setDuration(400);
-		animator2.setInterpolator(new AccelerateInterpolator());
-		animator.start();
-		animator2.start();
 	}
 
 	@Override

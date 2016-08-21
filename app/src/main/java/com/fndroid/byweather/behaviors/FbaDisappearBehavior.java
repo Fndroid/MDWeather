@@ -11,14 +11,13 @@ import android.view.View;
  * Created by Administrator on 2016/7/27.
  */
 
-public class FbaDIsappearBehaviro extends FloatingActionButton.Behavior {
-	private static final String TAG = "FbaDIsappearBehaviro";
-	private boolean disappear = true;
+public class FbaDisappearBehavior extends FloatingActionButton.Behavior {
+	private static final String TAG = "FbaDisappearBehavior";
 
-	public FbaDIsappearBehaviro() {
+	public FbaDisappearBehavior() {
 	}
 
-	public FbaDIsappearBehaviro(Context context, AttributeSet attrs) {
+	public FbaDisappearBehavior(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
@@ -28,15 +27,12 @@ public class FbaDIsappearBehaviro extends FloatingActionButton.Behavior {
 			                               dyUnconsumed) {
 		super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed,
 				dxUnconsumed, dyUnconsumed);
-
-		if (dyConsumed < 0 && !disappear) {
-//			child.scrollBy(0, -200);
+		if (dyConsumed < 0) {
 			child.show();
-			disappear = true;
-		} else if (dyConsumed > 0 && disappear){
-//			child.scrollBy(0, 200);
+//			child.setVisibility(View.VISIBLE);
+		} else if (dyConsumed > 0){
 			child.hide();
-			disappear = false;
+//			child.setVisibility(View.INVISIBLE);
 		}
 	}
 
